@@ -54,7 +54,6 @@ inline double duvdy(double **u, double **v, int i, int j, double dy, double alph
 
 
 inline double Rt(double **k, double **e, double nu, int i, int j){
-	/*printf("KA-------- %d %d: %f %f %f % f\n", i,j,SQ(k[i][j]), nu , e[i][j], SQ(k[i][j]) / nu / e[i][j]);*/
 	return SQ(k[i][j]) / nu / e[i][j];
 }
 
@@ -66,7 +65,6 @@ inline double get_delta(int i, int j, int imax, int jmax, double dx, double dy){
 }
 
 double Rd(double **k, double nu, double delta, int i, int j){
-	/*printf("** %f, %f, %f, %f \n", k[i][j],nu,delta,sqrt(fabs(k[i][j])) * delta / nu);*/
 	return sqrt(fabs(k[i][j])) * delta / nu;
 }
 
@@ -81,16 +79,13 @@ double fnu(double **k, double **e, double nu, double delta, int i, int j){
 
 inline double f1(double **k, double **e, double nu, double delta, int i, int j){
 	return 1.0;
-	/*return 1 + (0.05 / fnu(k,e,nu,delta,i,j) ) * (0.05 / fnu(k,e,nu,delta,i,j) ) * (0.05 / fnu(k,e,nu,delta,i,j) );*/
 }
 
 inline double f2(double **k, double **e, double nu, double delta, int i, int j){
 	return 1.0;
-	/*return 1 - exp( - SQ( Rt(k,e,nu,i,j) ) );*/
 }
 
 double visc_t(double **k, double **e, double nu, double cn, double delta, int i, int j){
-	/*printf("KA---- %f %f %f %f \n", cn, fnu(k,e,nu,delta,i,j), SQ(k[i][j]) , e[i][j]);*/
 	return cn * fnu(k,e,nu,delta,i,j) * SQ(k[i][j]) / e[i][j];
 }
 
@@ -136,8 +131,6 @@ inline double dvisct_dx( double **k, double **e, double nu, double cn, double de
 	double c3 = c1 * (k[i+1][j]-k[i][j]) - c2 *(k[i][j]-k[i-1][j]);
 	c3=c3/SQ(dx);
 
-	/*printf("KA---- %d %d: %f %f %f %f %f %f %f \n", i, j, c1, c2, c3, k[i+1][j], k[i][j], k[i][j], k[i-1][j] );*/
-
 	return c3;
 }
 
@@ -146,11 +139,6 @@ inline double dvisct_dy( double **k, double **e, double nu, double cn, double de
 	double c2 = (visc( k, e, nu, cn, delta, i, j-1 )+visc( k, e, nu, cn, delta, i, j ))/2;
 	double c3 = c1 * (k[i][j+1]-k[i][j]) - c2 * (k[i][j]-k[i][j-1]);
 	c3=c3/SQ(dy);
-
-	/*printf("KA---- %f %f %f \n", c1, c2, c3 );*/
-
-
-
 
 	return c3;
 }
@@ -168,14 +156,12 @@ double d_fnu_visctEP_dx( double **k, double **e, double nu, double cn, double de
 
 	double mean_f_1 = (fnu( k, e, nu, delta, i, j )+fnu( k, e, nu, delta, i+1, j ))/2;
 	double mean_nu_1 = (visc2( k, e, nu, cn, delta, i, j )+visc2( k, e, nu, cn, delta, i+1, j ))/2;
-	/*double mean_nu_1 = visc_t( k, e, nu, cn, delta, i, j);*/
-
+	
 	double c1 = mean_f_1 * mean_nu_1 * (e[i+1][j]-e[i][j]);
 
 	double mean_f_2 = (fnu( k, e, nu, delta, i-1, j )+fnu( k, e, nu, delta, i, j ))/2;
 	double mean_nu_2 = (visc2( k, e, nu, cn, delta, i-1, j )+visc2( k, e, nu, cn, delta, i, j ))/2;
-	/*double mean_nu_2 = visc_t( k, e, nu, cn, delta, i, j );*/
-
+	
 	double c2 = mean_f_2*mean_nu_2*(e[i][j]-e[i-1][j]);
 
 	double res = (c1-c2)/SQ(dx);
@@ -185,8 +171,7 @@ double d_fnu_visctEP_dx( double **k, double **e, double nu, double cn, double de
 }
 
 double d_fnu_visctEP_dy( double **k, double **e, double nu, double cn, double delta, double dy, int i, int j ){
-	/*return (  ((fnu( k, e, nu, delta, i, j )+fnu( k, e, nu, delta, i, j+1 ))/2)*((visc_t( k, e, nu, cn, delta, i, j )+visc_t( k, e, nu, cn, delta, i, j+1 ))/2)*(e[i][j+1]-e[i][j]) - ((fnu( k, e, nu, delta, i, j-1 )+fnu( k, e, nu, delta, i, j ))/2)*((visc_t( k, e, nu, cn, delta, i, j-1 )+visc_t( k, e, nu, cn, delta, i, j ))/2)*(e[i][j]-e[i][j-1]) )/SQ(dy); */
-
+	
 	double c1 = ((fnu( k, e, nu, delta, i, j )+fnu( k, e, nu, delta, i, j+1 ))/2);
 	double c2 = ((visc2( k, e, nu, cn, delta, i, j )+visc2( k, e, nu, cn, delta, i, j+1 ))/2);
 
@@ -194,9 +179,7 @@ double d_fnu_visctEP_dy( double **k, double **e, double nu, double cn, double de
 	double c4 = ((visc2( k, e, nu, cn, delta, i, j-1 )+visc2( k, e, nu, cn, delta, i, j ))/2);
 
 	double res = (  c1*c2*(e[i][j+1]-e[i][j]) - c3 *c4 *(e[i][j]-e[i][j-1]) )/(dy*dy);
-
-	/*printf("d_fnu_visctEP_dy ---- %d %d: %f %f %f %f %f \n", i, j, c1, c2, c3, c4, res);*/
-
+	
 	return res;
 }
 
@@ -206,7 +189,6 @@ inline double dUdx( double **u, double dx, int i, int j ){
 }
 
 inline double dUdy( double **u, double dy, int i, int j ){
-	/*printf("KA dudy ------ %d %d: %f %f %f %f %f\n", i, j, u[i][j], u[i][j+1], u[i-1][j+1], u[i][j-1], u[i-1][j-1]);*/
 	return ( (u[i][j+1]+u[i-1][j+1]) - (u[i][j-1]+u[i-1][j-1]) ) / (4*dy);
 }
 
@@ -222,9 +204,7 @@ inline double gradU( double **u, double **v, double dx, double dy, int i, int j 
 	double c1 = 4*( dUdx( u, dx, i, j) )*( dUdx( u, dx, i, j) );
 	double c2 = 2*( dUdy( u, dy, i, j) + dVdx( v, dx, i, j ) )*( dUdy( u, dy, i, j) +dVdx( v, dx, i, j ) );
 	double c3 = 4*( dVdy( v, dy, i, j ) )*( dVdy( v, dy, i, j ) );
-
-	/*printf("KA grad ---- %d %d: %f %f %f %f %f %f %f \n", i, j, c1, c2, c3, dUdx( u, dx, i, j), dUdy( u, dy, i, j), dVdx( v, dx, i, j ) , dVdy( v, dy, i, j ) );*/
-
+	
 	return c1 + c2 + c3;
 }
 /* alpha [0, 1] determines a weighted average of discretizing with central differences and the donor-cell discretization */
@@ -339,13 +319,12 @@ void calculate_fg(
 				delta = get_delta(i, j, imax, jmax, dx, dy);
 
 				F[i][j] = U[i][j] + dt * (
-						2.0 * dndudxdx(K, E, nu, cn, delta, U, i, j, dx)
-						+ dndudypdvdxdy(K, E, nu, cn, delta, U, V, i, j, dx, dy)
-						/*- 2.0 * ddx(K,i,j,dx) / 3.0*/
-						- du2dx(U, i, j, dx, alpha)
-						- duvdy(U,V,i,j,dy, alpha)
-						+ GX
-						);
+					  2.0 * dndudxdx(K, E, nu, cn, delta, U, i, j, dx)
+					+ dndudypdvdxdy(K, E, nu, cn, delta, U, V, i, j, dx, dy)
+					- du2dx(U, i, j, dx, alpha)
+					- duvdy(U,V,i,j,dy, alpha)
+					+ GX
+					);
 			}
 
 	for(i=1; i<=imax; i++)
@@ -354,13 +333,12 @@ void calculate_fg(
 				delta = get_delta(i, j, imax, jmax, dx, dy);
 
 				G[i][j] = V[i][j] + dt * (
-						dndudypdvdxdx(K, E, nu, cn, delta, U, V, i, j, dx, dy)
-						+ 2.0 * dndvdydy(K, E, nu, cn, delta, V, i, j, dy)
-						/*- 2.0 * ddy(K,i,j,dy) / 3.0*/
-						- duvdx(U,V,i,j,dx, alpha)
-						- dv2dy(V, i, j, dy, alpha)
-						+ GY
-						);
+					  dndudypdvdxdx(K, E, nu, cn, delta, U, V, i, j, dx, dy)
+					+ 2.0 * dndvdydy(K, E, nu, cn, delta, V, i, j, dy)
+					- duvdx(U,V,i,j,dx, alpha)
+					- dv2dy(V, i, j, dy, alpha)
+					+ GY 
+					 );
 			}
 
 }
@@ -467,56 +445,28 @@ void comp_KAEP(
 		for(j=1; j<=jmax; j++)
 			if(IS_FLUID(Flag[i][j])	) {
 				delta = get_delta(i, j, imax, jmax, dx, dy);
-
-				/*printf("KA-- %d %d: %f %f %f %f %f %f %f %f %f %f \n", i,j,KA[i][j], dt,	dvisct_dx( KA, EP, nu, cn, delta, dx, i, j )
-									, dvisct_dy( KA, EP, nu, cn, delta, dy, i, j )
-								    ,dUkedx( U, KA, dx, alpha, i, j )
-								    , dVkedy( V, KA, dy, alpha, i, j )
-							        , visc_t( KA, EP, nu, cn, delta, i, j )
-							         ,gradU( U, V, dx, dy, i, j )
-							         , EP[i][j]
-							         , KA[i][j] + dt*( dvisct_dx( KA, EP, nu, cn, delta, dx, i, j ) + dvisct_dy( KA, EP, nu, cn, delta, dy, i, j )- dUkedx( U, KA, dx, alpha, i, j )- dVkedy( V, KA, dy, alpha, i, j ) + 0.5 * visc_t( KA, EP, nu, cn, delta, i, j )* gradU( U, V, dx, dy, i, j )- EP[i][j]));
-							         */
-
-
 				KA[i][j] = KA[i][j] + dt*(
-						dvisct_dx( KA, EP, nu, cn, delta, dx, i, j )
-						+ dvisct_dy( KA, EP, nu, cn, delta, dy, i, j )
-					    - dUkedx( U, KA, dx, alpha, i, j )
-					    - dVkedy( V, KA, dy, alpha, i, j )
-				        + 0.5 * visc_t( KA, EP, nu, cn, delta, i, j )
-				              * gradU( U, V, dx, dy, i, j )
-				        - EP[i][j]);
-
-				/*printf("EP-- %d %d --> %f %f %f %f %f %f %f %f %f %f \n",i,j,EP[i][j] , dt
-						  ,d_fnu_visctEP_dx( KA, EP, nu, cn, delta, dx, i, j )
-		                , d_fnu_visctEP_dy( KA, EP, nu, cn, delta, dy, i, j )
-		                , dUkedx( U, EP, dx, alpha, i, j )
-		                , dVkedy( V, EP, dy, alpha, i, j )
-		                , ((c1*f1(KA, EP, nu, delta, i, j))/2),
-		                KA[i][j],
-		                gradU(U, V, dx, dy, i, j)
-		                , c2*f2( KA, EP, nu, delta, i, j )
-				);*/
+					   dvisct_dx( KA, EP, nu, cn, delta, dx, i, j )
+					 + dvisct_dy( KA, EP, nu, cn, delta, dy, i, j )
+					 - dUkedx( U, KA, dx, alpha, i, j )
+					 - dVkedy( V, KA, dy, alpha, i, j )
+				         + 0.5 * visc_t( KA, EP, nu, cn, delta, i, j ) * gradU( U, V, dx, dy, i, j )
+				         - EP[i][j]
+					 );
 			}
-
 
 	for(i=1; i<=imax; i++)
 		for(j=1; j<=jmax; j++)
 			if(IS_FLUID(Flag[i][j])	) {
 				delta = get_delta(i, j, imax, jmax, dx, dy);
 				EP[i][j] = EP[i][j] + dt*(
-													  /*(ce/cn)**/ d_fnu_visctEP_dx( KA, EP, nu, cn, delta, dx, i, j )
-									                + /*(ce/cn)**/ d_fnu_visctEP_dy( KA, EP, nu, cn, delta, dy, i, j )
-									                - dUkedx( U, EP, dx, alpha, i, j )
-									                - dVkedy( V, EP, dy, alpha, i, j )
-									                + c1*f1(KA, EP, nu, delta, i, j)/2
-									                	*KA[i][j]
-									                	*gradU(U, V, dx, dy, i, j)
-									                - c2*f2( KA, EP, nu, delta, i, j )
-														*SQ(EP[i][j])
-														/KA[i][j]
-											);
+					   d_fnu_visctEP_dx( KA, EP, nu, cn, delta, dx, i, j )
+					 + d_fnu_visctEP_dy( KA, EP, nu, cn, delta, dy, i, j )
+					 - dUkedx( U, EP, dx, alpha, i, j )
+					 - dVkedy( V, EP, dy, alpha, i, j )
+					 + c1*f1(KA, EP, nu, delta, i, j)/2 * KA[i][j] * gradU(U, V, dx, dy, i, j)
+					 - c2*f2( KA, EP, nu, delta, i, j ) * SQ(EP[i][j]) / KA[i][j]
+					 );
 			}
 }
 
