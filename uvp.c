@@ -139,20 +139,15 @@ inline double dvisctEP_dy( double **k, double **e, double nu, double cn, double 
 }
 
 double d_fnu_visctEP_dx( double **k, double **e, double nu, double cn, double delta, double dx, int i, int j ){
-
 	double mean_nu_1 = (visc2( k, e, nu, cn, delta, i, j )+visc2( k, e, nu, cn, delta, i+1, j ))/2;
-	
 	double c1 = mean_nu_1 * (e[i+1][j]-e[i][j]);
-
 	double mean_nu_2 = (visc2( k, e, nu, cn, delta, i-1, j )+visc2( k, e, nu, cn, delta, i, j ))/2;
-	
 	double c2 = mean_nu_2*(e[i][j]-e[i-1][j]);
 
 	return (c1-c2)/SQ(dx);
 }
 
 double d_fnu_visctEP_dy( double **k, double **e, double nu, double cn, double delta, double dy, int i, int j ){
-	
 	double c1 = ((visc2( k, e, nu, cn, delta, i, j )+visc2( k, e, nu, cn, delta, i, j+1 ))/2);
 	double c2 = ((visc2( k, e, nu, cn, delta, i, j-1 )+visc2( k, e, nu, cn, delta, i, j ))/2);
 	
@@ -326,7 +321,6 @@ void calculate_fg(
 					+ GY 
 					 );
 			}
-
 }
 
 /**
@@ -348,7 +342,6 @@ void calculate_rs(
 	for(i=1; i<=imax; i++)
 		for(j=1; j<=jmax; j++)
 				RS[i][j] = IS_FLUID(Flag[i][j]) * 1/dt*((F[i][j]-F[i-1][j])/dx + (G[i][j]-G[i][j-1])/dy) ;
-
 }
 
 /**
@@ -371,7 +364,6 @@ void calculate_dt(
 			fmin(Re/2/(1/(dx*dx) + 1/(dy*dy)),dx/fmatrix_max(U,0,imax+1,0,jmax+1) ),
 			dy/fmatrix_max(V,0,imax+1,0,jmax+1)
 			);
-
 }
 
 /**
