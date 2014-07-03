@@ -44,9 +44,6 @@ void calculate_fg(
 		  int **Flag
 );
 
-
-
-
 /**
  * This operation computes the right hand side of the pressure poisson equation.
  * The right hand side is computed according to the formula
@@ -65,7 +62,6 @@ void calculate_rs(
   double **RS,
   int **Flag
 );
-
 
 /**
  * Determines the maximal time step size. The time step size is restricted
@@ -86,7 +82,6 @@ void calculate_dt(
   double **U,
   double **V
 );
-
 
 /**
  * Calculates the new velocity values according to the formula
@@ -114,8 +109,10 @@ void calculate_uv(
   double **P,
   int **Flag
 );
-
-
+/*
+ * Computation of k(n+1) and eps(n+1) according to 
+ * the transport equations for k and eps
+ */
 void comp_KAEP( 
   double Re, 
   double nu,
@@ -137,7 +134,5 @@ void comp_KAEP(
   double GY, 
   int **Flag 
 );
-
-
 
 #endif
