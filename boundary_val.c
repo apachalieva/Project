@@ -11,8 +11,15 @@
 /**
  * No-slip boundary conditions
  */
-void no_slip(int imax, int jmax, double** U, double** V, double** K, double **E, int c){
-
+void no_slip(
+  int 	imax, 
+  int 	jmax, 
+  double **U, 
+  double **V, 
+  double **K, 
+  double **E, 
+  int    c
+){
 	int i,j;
 
 	switch (c){
@@ -53,14 +60,20 @@ void no_slip(int imax, int jmax, double** U, double** V, double** K, double **E,
 		}
 	break;
 	}
-
 }
 
 /**
  * Free-slip boundary conditions
  */
-void free_slip(int imax, int jmax, double** U, double** V, double** K, double **E, int c){
-
+void free_slip(
+  int    imax, 
+  int    jmax, 
+  double **U, 
+  double **V, 
+  double **K, 
+  double **E, 
+  int    c
+){
 	int i,j;
 
 	switch (c){
@@ -106,8 +119,15 @@ void free_slip(int imax, int jmax, double** U, double** V, double** K, double **
 /**
  * Outflow boundary conditions
  */
-void outflow(int imax, int jmax, double** U, double** V, double** K, double **E, int c){
-
+void outflow(
+  int    imax, 
+  int    jmax, 
+  double **U, 
+  double **V, 
+  double **K, 
+  double **E, 
+  int    c
+){
 	int i,j;
 
 	switch (c){
@@ -261,17 +281,26 @@ void boundaryvalues(
 			}
 }
 
-
 /**
- * Inflow boundary condition
+ * Supposing the three different problems:
+ * 	karman = Karman vortex street
+ * 	shear  = Plane shear flow
+ *	step   = Flow over a step
+ * we deal with these problems differently
  */
-void spec_boundary_val( char* problem, int imax, int jmax, double **U, double **V, double **K, double **E, double Re, double dp, double cn, double ylength){
-/* supposing the three different problems:
- * karman = Karman vortex street
- * shear  = plane shear flow
- * step   = flow over a step
- * we deal with these problems
- */
+void spec_boundary_val( 
+  char   *problem, 
+  int    imax, 
+  int    jmax, 
+  double **U, 
+  double **V, 
+  double **K, 
+  double **E, 
+  double Re, 
+  double dp, 
+  double cn, 
+  double ylength
+){
 	int j;
 	if (strcmp( problem,"karman" )==0)
 		for (j=1; j<=jmax; j++){

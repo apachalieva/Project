@@ -46,38 +46,25 @@
  */
 
 
-
-
-void has_nan(double **m, int imax, int jmax){
-	int i,j;
-
-	for(i=0; i<=imax+1; i++)
-			for(j=0; j<=jmax+1; j++){
-				if (m[i][j] != m[i][j])
-					printf("[%d, %d] NaN\n", i,j);
-				if (isinf(m[i][j]))
-					printf("[%d, %d] Inf\n", i,j);
-			}
-}
-
-
 int main(int argc, char** args){
-	char pgm[50];
+	
 	double Re, UI, VI, PI, GX, GY, t_end, xlength, ylength, dt, dx, dy, alpha, omg, tau, eps, dt_value, t, res, dp, nu;
 	double **U, **V, **P, **F, **G, **RS;
-	double **K;					/* turbulent kinetic energy k */
-	double **E; 					/* dissipation rate epsilon */
-	double KI, EI, cn, ce, c1, c2; 			/* K and E: Initial values for k and epsilon */
+	double **K;			/* turbulent kinetic energy k */
+	double **E; 			/* dissipation rate epsilon */
+	double KI, EI, cn, ce, c1, c2; 	/* K and E: Initial values for k and epsilon */
+	
 	int n, step, it, imax, jmax, itermax, pb;
 	int fluid_cells;		/* Number of fluid cells in our geometry */
-	char problem[10];		/* Problem name, file name */
 	int boundaries[4];
+	int **Flag;			/* Flagflield matrix */
+	
+	char pgm[50];
+	char problem[10];		/* Problem name, file name */
 	char *fname;
 
-	int **Flag;			/* Flagflield matrix */
-
 	if(argc>=2) 	fname=args[1];
-	else 			fname = PARAMF;
+	else 		fname = PARAMF;
 
 	read_parameters(fname, &Re, &UI, &VI, &PI, &GX, &GY, &t_end, &xlength, &ylength, &dt, &dx, &dy, &imax, &jmax, &alpha, &omg, &tau, &itermax, &eps, &dt_value, boundaries, &dp, &pb, &KI, &EI, &cn, &ce, &c1, &c2, pgm);
 
@@ -103,11 +90,9 @@ int main(int argc, char** args){
 	printf( "Number of fluid cells = %d\n", fluid_cells );
 	printf( "Reynolds number: %f\n", Re);
 
-
 	/* Allocate memory */
 	Flag = imatrix( 0, imax+1, 0, jmax+1 );
 
-	/* TODO should we change the dimension of the matrices in order to save space? */
 	U = matrix ( 0 , imax+1 , 0 , jmax+1 );
 	V = matrix ( 0 , imax+1 , 0 , jmax+1 );
 	P = matrix ( 0 , imax+1 , 0 , jmax+1 );
@@ -168,7 +153,6 @@ int main(int argc, char** args){
 			write_vtkFile( VISUAF, n, xlength, ylength, imax, jmax, dx, dy, U, V, P, K, E );
 			step++;
 		/*}*/
-
 	}
 
 	printf("Problem: %s\n", problem );
