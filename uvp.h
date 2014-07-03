@@ -1,7 +1,6 @@
 #ifndef __UVP_H__
 #define __UVP_H__
 
-
 /**
  * Determines the value of U and G according to the formula
  *
@@ -31,8 +30,8 @@ void calculate_fg(
 		  double dt,
 		  double dx,
 		  double dy,
-		  int imax,
-		  int jmax,
+		  int    imax,
+		  int    jmax,
 		  double **U,
 		  double **V,
 		  double **F,
@@ -41,7 +40,7 @@ void calculate_fg(
 		  double **E,
 		  double nu,
 		  double cn,
-		  int **Flag
+		  int    **Flag
 );
 
 /**
@@ -55,12 +54,12 @@ void calculate_rs(
   double dt,
   double dx,
   double dy,
-  int imax,
-  int jmax,
+  int    imax,
+  int    jmax,
   double **F,
   double **G,
   double **RS,
-  int **Flag
+  int    **Flag
 );
 
 /**
@@ -77,8 +76,8 @@ void calculate_dt(
   double *dt,
   double dx,
   double dy,
-  int imax,
-  int jmax,
+  int    imax,
+  int    jmax,
   double **U,
   double **V
 );
@@ -100,16 +99,16 @@ void calculate_uv(
   double dt,
   double dx,
   double dy,
-  int imax,
-  int jmax,
+  int    imax,
+  int    jmax,
   double **U,
   double **V,
   double **F,
   double **G,
   double **P,
-  int **Flag
+  int    **Flag
 );
-/*
+/**
  * Computation of k(n+1) and eps(n+1) according to 
  * the transport equations for k and eps
  */
@@ -124,15 +123,15 @@ void comp_KAEP(
   double dt,
   double dx,
   double dy,
-  int imax,
-  int jmax,
+  int    imax,
+  int    jmax,
   double **U, 
   double **V, 
   double **KA, 
   double **EP, 
   double GX, 
   double GY, 
-  int **Flag 
+  int    **Flag 
 );
 
 #endif

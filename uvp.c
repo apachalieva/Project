@@ -216,6 +216,9 @@ inline double dVkedy( double **v, double **e, double dy, double alpha, int i, in
 	return (c1-c2)/dy+alpha/dy*(c3-c4);
 }
 
+/*
+ * Calculation of F and G
+ */
 void calculate_fg(
   double Re,
   double GX,
@@ -326,7 +329,9 @@ void calculate_fg(
 
 }
 
-
+/**
+ * Calculation of the right-hand side of the pressure equation
+ */
 void calculate_rs(
   double dt,
   double dx,
@@ -346,7 +351,9 @@ void calculate_rs(
 
 }
 
-
+/**
+ * CFL conditions implemented, stepsize control
+ */
 void calculate_dt(
   double Re,
   double tau,
@@ -365,7 +372,9 @@ void calculate_dt(
 
 }
 
-
+/**
+ * Calculation of the u and v values
+ */
 void calculate_uv(
   double dt,
   double dx,
@@ -392,10 +401,9 @@ void calculate_uv(
 				V[i][j] = G[i][j] - dt/dy*(P[i][j+1]-P[i][j]);
 }
 
-/*
- * 
- *
- *
+/**
+ * Computation of k(n+1) and eps(n+1) according to 
+ * the transport equations for k and eps
  */
 void comp_KAEP( 
   double Re, 
