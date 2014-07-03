@@ -429,6 +429,7 @@ void comp_KAEP(
 	int i, j;
 	double delta;
 	
+	/* Calculation of the k - turbulent kinetic energy */
 	for(i=1; i<=imax; i++)
 		for(j=1; j<=jmax; j++)
 			if(IS_FLUID(Flag[i][j])	) {
@@ -442,7 +443,7 @@ void comp_KAEP(
 				         - EP[i][j]
 					 );
 			}
-
+	/* Calculation of the eps - dissipation rate*/
 	for(i=1; i<=imax; i++)
 		for(j=1; j<=jmax; j++)
 			if(IS_FLUID(Flag[i][j])	) {
