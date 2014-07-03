@@ -23,33 +23,28 @@ inline double ddy(double **m, int i, int j, double dy){
 
 /* approximation of the first derivative of the square of u in x */
 inline double du2dx(double **m, int i, int j, double dx, double alpha){
-	return (
-			SQ(m[i][j]+m[i+1][j]) - SQ(m[i-1][j]+m[i][j])
-			+  alpha * ( fabs(m[i][j]+m[i+1][j]) * (m[i][j]-m[i+1][j]) -  fabs(m[i-1][j]+m[i][j]) * (m[i-1][j]-m[i][j]) )
-            )/dx/4.0;
+	return (SQ(m[i][j]+m[i+1][j]) - SQ(m[i-1][j]+m[i][j])
+	      + alpha * ( fabs(m[i][j]+m[i+1][j]) * (m[i][j]-m[i+1][j]) - fabs(m[i-1][j]+m[i][j]) * (m[i-1][j]-m[i][j]) )
+               )/dx/4.0;
 }
 
 /* approximation of the first derivative of the square of v in y */
 inline double dv2dy(double **m, int i, int j, double dy, double alpha){
-	return (
-			SQ(m[i][j]+m[i][j+1]) - SQ(m[i][j-1]+m[i][j])
-			+ alpha * ( fabs(m[i][j]+m[i][j+1]) * (m[i][j]-m[i][j+1]) -  fabs(m[i][j-1]+m[i][j]) * (m[i][j-1]-m[i][j]))
-	                       )/dy/4.0;
+	return (SQ(m[i][j]+m[i][j+1]) - SQ(m[i][j-1]+m[i][j])
+	      + alpha * ( fabs(m[i][j]+m[i][j+1]) * (m[i][j]-m[i][j+1]) -  fabs(m[i][j-1]+m[i][j]) * (m[i][j-1]-m[i][j]))
+	       )/dy/4.0;
 }
 
-
 inline double duvdx(double ** u, double **v, int i, int j, double dx, double alpha){
-	return (
-			(u[i][j]+u[i][j+1]) * (v[i][j]+v[i+1][j]) - (u[i-1][j]+u[i-1][j+1]) * (v[i-1][j]+v[i][j])
-			+ alpha * ( fabs(u[i][j]+u[i][j+1]) * (v[i][j]-v[i+1][j]) -  fabs(u[i-1][j]+u[i-1][j+1]) * (v[i-1][j]-v[i][j]) )
-	                       )/dx/4.0;
+	return ( (u[i][j]+u[i][j+1]) * (v[i][j]+v[i+1][j]) - (u[i-1][j]+u[i-1][j+1]) * (v[i-1][j]+v[i][j])
+	        + alpha * ( fabs(u[i][j]+u[i][j+1]) * (v[i][j]-v[i+1][j]) -  fabs(u[i-1][j]+u[i-1][j+1]) * (v[i-1][j]-v[i][j]) )
+	        )/dx/4.0;
 }
 
 inline double duvdy(double **u, double **v, int i, int j, double dy, double alpha){
-	return (
-			(u[i][j]+u[i][j+1]) * (v[i][j]+v[i+1][j]) - (u[i][j-1]+u[i][j]) * (v[i][j-1]+v[i+1][j-1])
-			+ alpha * ( fabs(v[i][j]+v[i+1][j]) * (u[i][j]-u[i][j+1]) -  fabs(v[i][j-1]+v[i+1][j-1]) * (u[i][j-1]-u[i][j]) )
-	                       )/dy/4.0;
+	return ( (u[i][j]+u[i][j+1]) * (v[i][j]+v[i+1][j]) - (u[i][j-1]+u[i][j]) * (v[i][j-1]+v[i+1][j-1])
+	        + alpha * ( fabs(v[i][j]+v[i+1][j]) * (u[i][j]-u[i][j+1]) -  fabs(v[i][j-1]+v[i+1][j-1]) * (u[i][j-1]-u[i][j]) )
+	        )/dy/4.0;
 }
 
 
@@ -59,8 +54,8 @@ inline double Rt(double **k, double **e, double nu, int i, int j){
 
 inline double get_delta(int i, int j, int imax, int jmax, double dx, double dy){
 	return MIN(
-					MIN(  (i-0.5)*dx, (imax-(i-0.5))*dx  ),
-					MIN(  (j-0.5)*dy,  (jmax-(j-0.5))*dy )
+		   MIN(  (i-0.5)*dx, (imax-(i-0.5))*dx  ),
+		   MIN(  (j-0.5)*dy,  (jmax-(j-0.5))*dy )
 		);
 }
 
@@ -68,14 +63,6 @@ double Rd(double **k, double nu, double delta, int i, int j){
 	return sqrt(fabs(k[i][j])) * delta / nu;
 }
 
-double fnu(double **k, double **e, double nu, double delta, int i, int j){
-	/*return SQ( 1-exp( -0.0165 * Rd(k,nu,delta,i,j) ) )  * (1 + 20.5 / Rt(k,e,nu,i,j) );*/
-	/*printf("	%f: %f\n", -0.0165 * Rd(k,nu,delta,i,j), exp( -0.0165 * Rd(k,nu,delta,i,j) ));*/
-
-	return 1.0;
-	/*printf("KA-----* %f %f %f % f\n", -0.0165 * Rd(k,nu,delta,i,j), exp( -0.0165 * Rd(k,nu,delta,i,j) ), Rt(k,e,nu,i,j), ( 1- exp( -0.0165 * Rd(k,nu,delta,i,j) ) )  *( 1-exp( -0.0165 * Rd(k,nu,delta,i,j) ) )  * (1 + 20.5 / Rt(k,e,nu,i,j) ));*/
-	/*return ( 1- exp( -0.0165 * Rd(k,nu,delta,i,j) ) )  *( 1-exp( -0.0165 * Rd(k,nu,delta,i,j) ) )  * (1 + 20.5 / Rt(k,e,nu,i,j) );*/
-}
 
 inline double f1(double **k, double **e, double nu, double delta, int i, int j){
 	return 1.0;
@@ -86,7 +73,7 @@ inline double f2(double **k, double **e, double nu, double delta, int i, int j){
 }
 
 double visc_t(double **k, double **e, double nu, double cn, double delta, int i, int j){
-	return cn * fnu(k,e,nu,delta,i,j) * SQ(k[i][j]) / e[i][j];
+	return cn * SQ(k[i][j]) / e[i][j];
 }
 
 inline double visc(double **k, double **e, double nu, double cn, double delta, int i, int j){
@@ -111,17 +98,15 @@ inline double dndvdydy(double **k, double **e, double nu, double cn, double delt
 
 
 inline double dndudypdvdxdy(double **k, double **e, double nu, double cn, double delta, double **u, double **v, int i, int j, double dx, double dy){
-	return (
-			  visc_corner(k,e,nu,cn,delta, i,j  )  * ( (u[i][j+1] - u[i][j  ])/dy + (v[i+1][j  ] - v[i][j  ])/dx )
-			- visc_corner(k,e,nu,cn,delta, i,j-1)  * ( (u[i][j  ] - u[i][j-1])/dy + (v[i+1][j-1] - v[i][j-1])/dx )
-			) /  dy;
+	return ( visc_corner(k,e,nu,cn,delta, i,j  )  * ( (u[i][j+1] - u[i][j  ])/dy + (v[i+1][j  ] - v[i][j  ])/dx )
+	       - visc_corner(k,e,nu,cn,delta, i,j-1)  * ( (u[i][j  ] - u[i][j-1])/dy + (v[i+1][j-1] - v[i][j-1])/dx )
+	        ) /  dy;
 }
 
 inline double dndudypdvdxdx(double **k, double **e, double nu, double cn, double delta, double **u, double **v, int i, int j, double dx, double dy){
-	return (
-			  visc_corner(k,e,nu,cn,delta, i   ,j)  * ( (u[i  ][j+1] - u[i  ][j  ])/dy + (v[i+1][j  ] - v[i  ][j  ])/dx )
-			- visc_corner(k,e,nu,cn,delta, i-1,j )  * ( (u[i-1][j+1] - u[i-1][j  ])/dy + (v[i  ][j  ] - v[i-1][j  ])/dx )
-			) /  dx;
+	return ( visc_corner(k,e,nu,cn,delta, i  ,j)  * ( (u[i  ][j+1] - u[i  ][j  ])/dy + (v[i+1][j  ] - v[i  ][j  ])/dx )
+	       - visc_corner(k,e,nu,cn,delta, i-1,j)  * ( (u[i-1][j+1] - u[i-1][j  ])/dy + (v[i  ][j  ] - v[i-1][j  ])/dx )
+		) / dx;
 }
 
 
@@ -138,49 +123,41 @@ inline double dvisct_dy( double **k, double **e, double nu, double cn, double de
 	double c1 = (visc( k, e, nu, cn, delta, i, j )+visc( k, e, nu, cn, delta, i, j+1 ))/2;
 	double c2 = (visc( k, e, nu, cn, delta, i, j-1 )+visc( k, e, nu, cn, delta, i, j ))/2;
 	double c3 = c1 * (k[i][j+1]-k[i][j]) - c2 * (k[i][j]-k[i][j-1]);
-	c3=c3/SQ(dy);
 
-	return c3;
+	return c3/SQ(dy);
 }
 
 inline double dvisctEP_dx( double **k, double **e, double nu, double cn, double delta, double dx, int i, int j ){
-	return ( ((visc_t( k, e, nu, cn, delta, i, j )+visc_t( k, e, nu, cn, delta, i+1, j ))/2)*(e[i+1][j]-e[i][j]) - 
-	         ((visc_t( k, e, nu, cn, delta, i-1, j )+visc_t( k, e, nu, cn, delta, i, j ))/2)*(e[i][j]-e[i-1][j]) )/SQ(dx);
+	return ( ((visc_t( k, e, nu, cn, delta, i, j ) + visc_t( k, e, nu, cn, delta, i+1, j ))/2) * (e[i+1][j]-e[i][j]) 
+	       - ((visc_t( k, e, nu, cn, delta, i-1, j ) + visc_t( k, e, nu, cn, delta, i, j ))/2) * (e[i][j]-e[i-1][j])
+	       )/SQ(dx);
 }
 
 inline double dvisctEP_dy( double **k, double **e, double nu, double cn, double delta, double dy, int i, int j ){
-	return ( ((visc_t( k, e, nu, cn, delta, i, j )+visc_t( k, e, nu, cn, delta, i, j+1 ))/2)*(e[i][j+1]-e[i][j]) -  ((visc_t( k, e, nu, cn, delta, i, j-1 )+visc_t( k, e, nu, cn, delta, i, j ))/2)*(e[i][j]-e[i][j-1]) )/SQ(dy);
+	return ( ((visc_t( k, e, nu, cn, delta, i, j ) + visc_t( k, e, nu, cn, delta, i, j+1 ))/2) * (e[i][j+1]-e[i][j]) 
+	       - ((visc_t( k, e, nu, cn, delta, i, j-1 ) + visc_t( k, e, nu, cn, delta, i, j ))/2) * (e[i][j]-e[i][j-1]) 
+	       )/SQ(dy);
 }
 
 double d_fnu_visctEP_dx( double **k, double **e, double nu, double cn, double delta, double dx, int i, int j ){
 
-	double mean_f_1 = (fnu( k, e, nu, delta, i, j )+fnu( k, e, nu, delta, i+1, j ))/2;
 	double mean_nu_1 = (visc2( k, e, nu, cn, delta, i, j )+visc2( k, e, nu, cn, delta, i+1, j ))/2;
 	
-	double c1 = mean_f_1 * mean_nu_1 * (e[i+1][j]-e[i][j]);
+	double c1 = mean_nu_1 * (e[i+1][j]-e[i][j]);
 
-	double mean_f_2 = (fnu( k, e, nu, delta, i-1, j )+fnu( k, e, nu, delta, i, j ))/2;
 	double mean_nu_2 = (visc2( k, e, nu, cn, delta, i-1, j )+visc2( k, e, nu, cn, delta, i, j ))/2;
 	
-	double c2 = mean_f_2*mean_nu_2*(e[i][j]-e[i-1][j]);
+	double c2 = mean_nu_2*(e[i][j]-e[i-1][j]);
 
-	double res = (c1-c2)/SQ(dx);
-
-
-	return res;
+	return (c1-c2)/SQ(dx);
 }
 
 double d_fnu_visctEP_dy( double **k, double **e, double nu, double cn, double delta, double dy, int i, int j ){
 	
-	double c1 = ((fnu( k, e, nu, delta, i, j )+fnu( k, e, nu, delta, i, j+1 ))/2);
-	double c2 = ((visc2( k, e, nu, cn, delta, i, j )+visc2( k, e, nu, cn, delta, i, j+1 ))/2);
-
-	double c3 = ((fnu( k, e, nu, delta, i, j-1 )+fnu( k, e, nu, delta, i, j ))/2);
-	double c4 = ((visc2( k, e, nu, cn, delta, i, j-1 )+visc2( k, e, nu, cn, delta, i, j ))/2);
-
-	double res = (  c1*c2*(e[i][j+1]-e[i][j]) - c3 *c4 *(e[i][j]-e[i][j-1]) )/(dy*dy);
+	double c1 = ((visc2( k, e, nu, cn, delta, i, j )+visc2( k, e, nu, cn, delta, i, j+1 ))/2);
+	double c2 = ((visc2( k, e, nu, cn, delta, i, j-1 )+visc2( k, e, nu, cn, delta, i, j ))/2);
 	
-	return res;
+	return ( c1*(e[i][j+1]-e[i][j]) - c2*(e[i][j]-e[i][j-1]) )/(dy*dy);;
 }
 
 /* backward discretization */
@@ -216,9 +193,7 @@ inline double dUkedx( double **u, double **ke, double dx, double alpha, int i, i
 	double c3 = fabs(u[i][j])*(ke[i][j]-ke[i+1][j])/2;
 	double c4 = fabs(u[i-1][j])*(ke[i-1][j]-ke[i][j])/2;
 
-	double res = (c1-c2)/dx +alpha/dx*(c3-c4);
-
-	return res;
+	return (c1-c2)/dx +alpha/dx*(c3-c4);
 }
 
 /* alpha [0, 1] determines a weighted average of discretizing with central differences and the donor-cell discretization */
@@ -227,10 +202,8 @@ inline double dVkedy( double **v, double **ke, double dy, double alpha, int i, i
 	double c2 = v[i][j-1]*(ke[i][j-1]+ke[i][j])/2;
 	double c3 = fabs(v[i][j])*(ke[i][j]-ke[i][j+1])/2;
 	double c4 = fabs(v[i][j-1])*(ke[i][j-1]-ke[i][j])/2;
-	double res = (c1-c2)/dy+alpha/dy*(c3-c4);
 
-
-	return res;
+	return (c1-c2)/dy+alpha/dy*(c3-c4);
 }
 
 void calculate_fg(
@@ -364,8 +337,6 @@ void calculate_rs(
 }
 
 
-
-
 void calculate_dt(
   double Re,
   double tau,
@@ -377,13 +348,10 @@ void calculate_dt(
   double **U,
   double **V
 ){
-
-
 	*dt = tau * fmin(
-					fmin(Re/2/(1/(dx*dx) + 1/(dy*dy)) ,
-							dx/fmatrix_max(U,0,imax+1,0,jmax+1) 	),
-								dy/fmatrix_max(V,0,imax+1,0,jmax+1)
-							);
+			fmin(Re/2/(1/(dx*dx) + 1/(dy*dy)),dx/fmatrix_max(U,0,imax+1,0,jmax+1) ),
+			dy/fmatrix_max(V,0,imax+1,0,jmax+1)
+			);
 
 }
 
@@ -412,11 +380,13 @@ void calculate_uv(
 		for(j=1; j<=jmax-1; j++)
 			if( IS_FLUID(Flag[i][j]) && IS_FLUID(Flag[i][j+1]) )
 				V[i][j] = G[i][j] - dt/dy*(P[i][j+1]-P[i][j]);
-
-
 }
 
-
+/*
+ * 
+ *
+ *
+ */
 void comp_KAEP( 
   double Re, 
   double nu,
