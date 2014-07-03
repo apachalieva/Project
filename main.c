@@ -121,7 +121,7 @@ int main(int argc, char** args){
 	
 	/* Initialize values to the Flag, u, v and p */
 	init_flag( pgm, imax, jmax, &fluid_cells, Flag );
-	init_uvp(UI, VI, PI, KI, EI, imax, jmax, U, V, P, K, E, Flag, problem);
+	init_uvp( UI, VI, PI, KI, EI, imax, jmax, U, V, P, K, E, Flag, problem );
 
 	t=.0;
 	n=0;

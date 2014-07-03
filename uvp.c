@@ -86,7 +86,7 @@ inline double visc_corner(double **k, double **e, double nu, double cn, double d
 	return ( visc(k,e,nu,cn,delta, i+1, j+1) + visc(k,e,nu,cn,delta, i, j+1) + visc(k,e,nu,cn,delta, i+1, j) + visc(k,e,nu,cn,delta, i, j) ) / 4.0;
 }
 
-/* 
+/** 
  *  Discretization of the Transport Equations for the calculation of k and epsilon
  */
 
@@ -186,7 +186,7 @@ inline double gradU( double **u, double **v, double dx, double dy, int i, int j 
 	return c1 + c2 + c3;
 }
 
-/* 
+/** 
  * Donor-cell sheme is used for discretization of the convective terms
  *  alpha [0, 1] determines a weighted average of discretizing with central 
  *  differences and the donor-cell discretization 
@@ -201,7 +201,7 @@ inline double dUkedx( double **u, double **e, double dx, double alpha, int i, in
 	return (c1-c2)/dx +alpha/dx*(c3-c4);
 }
 
-/* 
+/** 
  * Donor-cell sheme is used for discretization of the convective terms
  *  alpha [0, 1] determines a weighted average of discretizing with central 
  *  differences and the donor-cell discretization 
@@ -216,7 +216,7 @@ inline double dVkedy( double **v, double **e, double dy, double alpha, int i, in
 	return (c1-c2)/dy+alpha/dy*(c3-c4);
 }
 
-/*
+/**
  * Calculation of F and G
  */
 void calculate_fg(
@@ -353,6 +353,8 @@ void calculate_rs(
 
 /**
  * CFL conditions implemented, stepsize control
+ * 
+ * TODO NOT USED!
  */
 void calculate_dt(
   double Re,
